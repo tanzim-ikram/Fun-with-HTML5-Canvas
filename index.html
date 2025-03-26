@@ -8,10 +8,12 @@
 </head>
 
 <body>
+    <button id="resetButton">Reset</button>
     <canvas id="draw" width="800" height="800"></canvas>
     <script>
         const canvas = document.querySelector('#draw');
         const ctx = canvas.getContext('2d');
+        const resetButton = document.querySelector('#resetButton');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -19,7 +21,7 @@
         ctx.strokeStyle = '#BADA55';
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.lineWidth = 100;
+        ctx.lineWidth = 50;
 
         let isDrawing = false;
         let lastX = 0;
@@ -29,7 +31,6 @@
 
         function draw(e) {
             if (!isDrawing) return;     // Stop the function from running when the mouse is not down
-            console.log(e);
             ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
             ctx.beginPath();
             // Start from
@@ -58,6 +59,11 @@
 
         }
 
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Add event listeners
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mousedown', (e) => {
             isDrawing = true;
@@ -67,12 +73,44 @@
         canvas.addEventListener('mouseup', () => isDrawing = false);
         canvas.addEventListener('mouseout', () => isDrawing = false);
 
+        // Reset button functionality
+        resetButton.addEventListener('click', clearCanvas);
+
+        // Clear canvas on pressing 'Esc'
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                clearCanvas();
+            }
+        });
+
     </script>
 
     <style>
         html,
         body {
             margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #resetButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #FF3131;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #resetButton:hover {
+            background-color: #D22B2B;
         }
     </style>
 
